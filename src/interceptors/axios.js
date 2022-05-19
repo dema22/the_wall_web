@@ -1,27 +1,50 @@
 import axios from "axios";
+import TokenService from "../services/TokenService";
+const axiosInstance = axios.create({
+    baseURL: "http://localhost:8000/",
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
 
-axios.defaults.baseURL = 'http://localhost:8000/'
-let refresh = false;
-
-axios.interceptors.response.use(response => response, async error => {
-    if(error.response.status === 401 && !refresh){
-        refresh = true;
-        console.log("Error 401");
-        console.log("Getting refresh token from local storage");
-        const refreshToken = localStorage.getItem("refreshToken");
-        console.log(refreshToken);
-
-        const response = await axios.post('token/refresh/', {
-            refresh : refreshToken
-        });
-
-        if(response.status === 200) {
-            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data['access']}`;
-            console.log(axios);
-            // redo previous requests that failed
-            return axios(error.config);
+axiosInstance.interceptors.request.use(
+    (config) => {
+        const token = TokenService.getLocalAccessToken();
+        if (token) {
+            config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
         }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-    refresh = false;
-    return error;
-})
+);
+
+axiosInstance.interceptors.response.use(response => response, async (err) => {
+        const originalConfig = err.config;
+        console.log("Interceptor de respuesta");
+        console.log(originalConfig.url);
+        if (originalConfig.url !== "/auth/signin" && err.response) {
+            // Access Token was expired
+            if (err.response.status === 401 && !originalConfig._retry) {
+                console.log("ENTRO PORQ DIO 401");
+                originalConfig._retry = true;
+                try {
+                    console.log("Miro el token de refresco que tengo guardado antes de llamar al endpoint");
+                    console.log(TokenService.getLocalRefreshToken());
+                    const rs = await axiosInstance.post("token/refresh/", {
+                        refresh: TokenService.getLocalRefreshToken(),
+                    });
+                    console.log("NUEVO TOKEN DE ACCESSO QUE ME DIO EL ENDPOINT DE REFRESCO");
+                    console.log(rs.data.access);
+                    TokenService.updateLocalAccessToken(rs);
+                    return axiosInstance(originalConfig);
+                } catch (_error) {
+                    return Promise.reject(_error);
+                }
+            }
+        }
+        return Promise.reject(err);
+    }
+);
+export default axiosInstance;
