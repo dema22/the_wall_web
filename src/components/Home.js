@@ -1,6 +1,8 @@
 import {useEffect, useState} from 'react';
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
+import AuthService from "../services/AuthService";
+import axios from "axios";
 
 export const Home = () => {
     const [username,setUsername] = useState('');
@@ -22,8 +24,20 @@ export const Home = () => {
         console.log(response.data);
     }
 
+    const logout = async () => {
+        console.log("ENTRO A LA FUNCION DE LOG OUT");
+        const accessToken = TokenService.getLocalAccessToken();
+        await axios.post('http://localhost:8000/logout/', {
+            refresh_token: TokenService.getLocalRefreshToken(),
+        },{
+            headers: { 'Authorization': `Bearer ${accessToken}`}
+        });
+        TokenService.removeTokenInfo();
+    };
+
     return <div>Home
         <h3> Hi {username}!!!</h3>
         <button onClick={viewUserPosts}>Your posts</button>
+        <button onClick={logout}>LogOut</button>
     </div>
 }

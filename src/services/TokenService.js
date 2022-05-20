@@ -21,5 +21,11 @@ class TokenService {
     updateUserId(userId) {
         localStorage.setItem('userId', userId);
     }
+    removeTokenInfo() {
+        console.log("REMOVE TOKEN INFO FROM LOCAL STORAGE");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("userId");
+    }
 }
 export default new TokenService();
