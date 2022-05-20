@@ -1,5 +1,5 @@
 import {Button, TextField} from "@mui/material";
-import axiosInstance from "../interceptors/axios";
+import axios from "axios";
 import { useState  } from "react";
 import {Navigate} from "react-router-dom";
 import jwt_decode from "jwt-decode";
@@ -13,7 +13,7 @@ export const Login = () => {
     const submitLogIn = async (e) => {
         e.preventDefault();
         // Send request to the API so the user can login
-        const response = await axiosInstance.post('token/', {
+        const response = await axios.post('http://localhost:8000/token/', {
             username,password
         });
         // Save the access token , refresh token in localstorage, and user id from decoded token.

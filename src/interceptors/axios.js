@@ -1,7 +1,9 @@
 import axios from "axios";
 import TokenService from "../services/TokenService";
+const baseURL = "http://localhost:8000/";
+
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8000/",
+    baseURL,
     headers: {
         "Content-Type": "application/json",
     },
@@ -11,7 +13,7 @@ axiosInstance.interceptors.request.use(
     (config) => {
         const token = TokenService.getLocalAccessToken();
         if (token) {
-            config.headers["Authorization"] = 'Bearer ' + token;  // for Spring Boot back-end
+            config.headers["Authorization"] = 'Bearer ' + token;
         }
         return config;
     },
@@ -32,7 +34,7 @@ axiosInstance.interceptors.response.use(response => response, async (err) => {
                 try {
                     console.log("Miro el token de refresco que tengo guardado antes de llamar al endpoint");
                     console.log(TokenService.getLocalRefreshToken());
-                    const rs = await axiosInstance.post("token/refresh/", {
+                    const rs = await axios.post(baseURL + "token/refresh/", {
                         refresh: TokenService.getLocalRefreshToken(),
                     });
                     console.log("NUEVO TOKEN DE ACCESSO QUE ME DIO EL ENDPOINT DE REFRESCO");
