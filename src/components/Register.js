@@ -2,6 +2,8 @@ import { useState  } from "react";
 import {Button, TextField} from "@mui/material";
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
+import CustomSnackbar from "./CustomSnackbar";
+import './Register.css';
 
 export const Register = () => {
     const [first_name, setFirstname] = useState('');
@@ -10,6 +12,7 @@ export const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [navigate, setNavigate] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const submitRegistration = async (e) => {
         e.preventDefault();
@@ -19,8 +22,13 @@ export const Register = () => {
                 first_name, last_name, username, email, password
             });
             setNavigate(true);
-        } catch(e) {
-            console.log("error");
+        } catch(err) {
+            if(err.response.data.username !== null) {
+                setErrorMessage(err.response.data.username[0]);
+                console.log(err.response.data);
+                console.log(errorMessage);
+                e.target.reset();
+            }
         }
     }
 
@@ -28,14 +36,16 @@ export const Register = () => {
         return <Navigate to={"/login"}/>
     }
 
-    return <div>Register
-        <form onSubmit={submitRegistration}>
-            <TextField label={'First Name'} onChange={ e => setFirstname(e.target.value) } />
-            <TextField label={'Last Name'} onChange={ e => setLastName(e.target.value) }/>
-            <TextField label={'Username'} onChange={ e => setUsername(e.target.value) }/>
-            <TextField label={'Email'} onChange={ e => setEmail(e.target.value) }/>
-            <TextField label={'Password'} onChange={ e => setPassword(e.target.value) }/>
+    return <div className="container">
+        <h1>Sign in!</h1>
+        <form onSubmit={submitRegistration} className="registration-container">
+            <TextField required label={'First Name'} onChange={ e => setFirstname(e.target.value) } className="textfield" />
+            <TextField required label={'Last Name'} onChange={ e => setLastName(e.target.value) } className="textfield"/>
+            <TextField required label={'Username'} onChange={ e => setUsername(e.target.value) } className="textfield"/>
+            <TextField required label={'Email'} onChange={ e => setEmail(e.target.value) } className="textfield"/>
+            <TextField required label={'Password'} onChange={ e => setPassword(e.target.value) } className="textfield"/>
             <Button type="submit">Submit</Button>
         </form>
+        {errorMessage && <CustomSnackbar open={true} message={errorMessage} />}
     </div>
 }

@@ -2,9 +2,11 @@ import {useEffect, useState} from 'react';
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
 import axios from "axios";
+import {Navigate} from "react-router-dom";
 
 export const Home = () => {
     const [username,setUsername] = useState('');
+    const [navigate, setNavigate] = useState(false);
 
     useEffect(() => {
         (
@@ -31,8 +33,13 @@ export const Home = () => {
         },{
             headers: { 'Authorization': `Bearer ${accessToken}`}
         });
+        setNavigate(true)
         TokenService.removeTokenInfo();
     };
+
+    if(navigate) {
+        return <Navigate to={"/login"}/>
+    }
 
     return <div>Home
         <h3> Hi {username}!!!</h3>
