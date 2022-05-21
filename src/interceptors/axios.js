@@ -1,6 +1,5 @@
 import axios from "axios";
 import TokenService from "../services/TokenService";
-import AuthService from "../services/AuthService";
 const baseURL = "http://localhost:8000/";
 
 const axiosInstance = axios.create({
@@ -41,7 +40,8 @@ axiosInstance.interceptors.response.use(response => response, async (err) => {
             TokenService.updateLocalAccessToken(rs);
             return axiosInstance(config);
         } catch (_error) {
-            await AuthService.logout();
+            TokenService.removeTokenInfo();
+            window.location.href = "http://localhost:3000/login"
             return Promise.reject(_error);
         }
     }

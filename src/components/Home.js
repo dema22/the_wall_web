@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
-import AuthService from "../services/AuthService";
 import axios from "axios";
 
 export const Home = () => {

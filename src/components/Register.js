@@ -13,11 +13,15 @@ export const Register = () => {
 
     const submitRegistration = async (e) => {
         e.preventDefault();
-        // Send request to the API to create a user
-        await axios.post('http://localhost:8000/registration/', {
-            first_name, last_name, username, email, password
-        });
-        setNavigate(true);
+        try {
+            // Send request to the API to create a user
+            await axios.post('http://localhost:8000/registration/', {
+                first_name, last_name, username, email, password
+            });
+            setNavigate(true);
+        } catch(e) {
+            console.log("error");
+        }
     }
 
     if(navigate) {
