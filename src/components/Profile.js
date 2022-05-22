@@ -1,7 +1,6 @@
 import {useEffect, useState} from 'react';
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
-import axios from "axios";
 import {Navigate} from "react-router-dom";
 
 export const Profile = () => {
@@ -27,11 +26,8 @@ export const Profile = () => {
 
     const logout = async () => {
         console.log("ENTRO A LA FUNCION DE LOG OUT");
-        const accessToken = TokenService.getLocalAccessToken();
-        await axios.post('http://localhost:8000/logout/', {
+        await axiosInstance.post('http://localhost:8000/logout/', {
             refresh_token: TokenService.getLocalRefreshToken(),
-        },{
-            headers: { 'Authorization': `Bearer ${accessToken}`}
         });
         setNavigate(true)
         TokenService.removeTokenInfo();
