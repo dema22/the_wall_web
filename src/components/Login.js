@@ -26,7 +26,7 @@ export const Login = () => {
     }
 
     if(navigate) {
-        return <Navigate to={"/"}/>
+        return <Navigate to={"/profile"}/>
     }
 
     return <div>Log In
