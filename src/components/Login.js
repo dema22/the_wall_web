@@ -4,6 +4,7 @@ import { useState  } from "react";
 import {Navigate} from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import TokenService from "../services/TokenService";
+import './Login.css';
 
 export const Login = () => {
     const [username, setUsername] = useState('');
@@ -29,11 +30,12 @@ export const Login = () => {
         return <Navigate to={"/profile"}/>
     }
 
-    return <div>Log In
-        <form onSubmit={submitLogIn}>
-            <TextField label={'Username'} onChange={ e => setUsername(e.target.value) } />
-            <TextField label={'Password'} onChange={ e => setPassword(e.target.value) }/>
-            <Button type="submit">Submit</Button>
+    return <div className="container">
+        <form onSubmit={submitLogIn} className="login-container">
+            <p>Log In</p>
+            <TextField margin="dense" label={'Username'} onChange={ e => setUsername(e.target.value) } className="textfield"/>
+            <TextField margin="dense" label={'Password'} onChange={ e => setPassword(e.target.value) } className="textfield"/>
+            <Button variant="contained" size="medium" type="submit">Submit</Button>
         </form>
     </div>
 }

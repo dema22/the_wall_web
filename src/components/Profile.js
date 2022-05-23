@@ -31,7 +31,7 @@ export const Profile = () => {
         <div>
             <h3> Hi {username}!!!</h3>
             <p>Now that you have an account, you can :</p>
-            <Button variant="outlined" onClick={viewUserPosts}>VIEW YOUR POSTS</Button>
+            <Button variant="outlined" size="small" onClick={viewUserPosts}>VIEW YOUR POSTS</Button>
             <CreatePostDialog/>
         {userPosts.map((post) => {
             return (

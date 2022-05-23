@@ -27,7 +27,7 @@ export const CreatePostDialog = () => {
     };
     return (
         <div>
-            <Button variant="outlined" onClick={handleClickOpen}>
+            <Button variant="outlined" size="small" onClick={handleClickOpen}>
                 CREATE A NEW POST
             </Button>
             <Dialog open={open} onClose={handleClose}>
@@ -45,6 +45,7 @@ export const CreatePostDialog = () => {
                             fullWidth
                             variant="standard"
                             onChange={ e => setTitle(e.target.value) }
+                            inputProps={{ maxLength: 20 }}
                         />
                         <TextField
                             required

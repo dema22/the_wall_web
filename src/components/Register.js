@@ -37,14 +37,14 @@ export const Register = () => {
     }
 
     return <div className="container">
-        <h1>Sign in!</h1>
         <form onSubmit={submitRegistration} className="registration-container">
-            <TextField required label={'First Name'} onChange={ e => setFirstname(e.target.value) } className="textfield" />
-            <TextField required label={'Last Name'} onChange={ e => setLastName(e.target.value) } className="textfield"/>
-            <TextField required label={'Username'} onChange={ e => setUsername(e.target.value) } className="textfield"/>
-            <TextField required label={'Email'} onChange={ e => setEmail(e.target.value) } className="textfield"/>
-            <TextField required label={'Password'} onChange={ e => setPassword(e.target.value) } className="textfield"/>
-            <Button type="submit">Submit</Button>
+            <p>Sign in</p>
+            <TextField margin="dense" required label={'First Name'} onChange={ e => setFirstname(e.target.value) } className="textfield" />
+            <TextField margin="dense" required label={'Last Name'} onChange={ e => setLastName(e.target.value) } className="textfield"/>
+            <TextField margin="dense" required label={'Username'} onChange={ e => setUsername(e.target.value) } className="textfield"/>
+            <TextField margin="dense" required label={'Email'} onChange={ e => setEmail(e.target.value) } className="textfield"/>
+            <TextField margin="dense" required label={'Password'} onChange={ e => setPassword(e.target.value) } className="textfield"/>
+            <Button variant="contained" size="medium" type="submit">Submit</Button>
         </form>
         {errorMessage && <CustomSnackbar open={true} message={errorMessage} />}
     </div>
