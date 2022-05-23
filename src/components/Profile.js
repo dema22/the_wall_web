@@ -3,6 +3,7 @@ import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
 import {Navigate} from "react-router-dom";
 import {CreatePostDialog} from "./CreatePostDialog";
+import {Button} from "@mui/material";
 
 export const Profile = () => {
     const [username,setUsername] = useState('');
@@ -37,10 +38,10 @@ export const Profile = () => {
     }
 
     return (
-        <div>Profile
+        <div>
             <h3> Hi {username}!!!</h3>
             <p>Now that you have an account, you can :</p>
-            <button onClick={viewUserPosts}>VIEW YOUR POSTS</button>
+            <Button variant="outlined" onClick={viewUserPosts}>VIEW YOUR POSTS</Button>
             <CreatePostDialog/>
         {userPosts.map((post) => {
             return (
