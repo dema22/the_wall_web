@@ -1,13 +1,11 @@
 import {useEffect, useState} from 'react';
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
-import {Navigate} from "react-router-dom";
 import {CreatePostDialog} from "./CreatePostDialog";
 import {Button} from "@mui/material";
 
 export const Profile = () => {
     const [username,setUsername] = useState('');
-    const [navigate, setNavigate] = useState(false);
     const [userPosts,setUserPosts] = useState([]);
 
     // useEffect doesn't expect the callback function to return Promise, using self invoking async function.
@@ -27,14 +25,6 @@ export const Profile = () => {
         const userPostResponse = await axiosInstance.get('post/profile/' + TokenService.getUserId());
         console.log(userPostResponse.data);
         setUserPosts(userPostResponse.data);
-    }
-
-    const createPost = async () => {
-        console.log("Creating post");
-    };
-
-    if(navigate) {
-        return <Navigate to={"/login"}/>
     }
 
     return (

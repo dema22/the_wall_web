@@ -1,19 +1,27 @@
 import React, {useEffect, useState} from "react";
 import {AppBar, Box, Button, Toolbar, Typography} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import TokenService from "../services/TokenService";
+import axios from "axios";
 
 export default function Navbar() {
     const [userId, setUserId] = useState(TokenService.getUserId);
-    console.log(userId);
-    useEffect(() => {
-        window.addEventListener('storage', () => {
-            const item = JSON.parse(localStorage.getItem('userId'))
-            if(item) {
-                setUserId(item)
-            }
-        })
-    },[])
+
+    const logout = async () => {
+        try {
+            console.log("Calling log out endpoint");
+            const accessToken = TokenService.getLocalAccessToken();
+            await axios.post('http://localhost:8000/logout/', {
+                refresh_token: TokenService.getLocalRefreshToken(),
+            }, {
+                headers: {'Authorization': `Bearer ${accessToken}`}
+            });
+            TokenService.removeTokenInfo();
+        } catch (err) {
+            // If the log out endpoint returns an error is because the token expired, so I just delete them
+            TokenService.removeTokenInfo();
+        }
+    };
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -35,10 +43,10 @@ export default function Navbar() {
                         ) : (
                         <>
                             <Link to ="/profile">
-                            <Button sx={{color: '#ffffff'}}>Profile</Button>
+                                <Button sx={{color: '#ffffff'}}>Profile</Button>
                             </Link>
                             <Link to ="/login">
-                            <Button sx={{color: '#ffffff'}}>LogOut</Button>
+                                <Button sx={{color: '#ffffff'}} onClick={logout}>Logout</Button>
                             </Link>
                         </>
                         )}

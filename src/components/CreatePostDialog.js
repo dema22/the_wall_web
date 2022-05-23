@@ -2,7 +2,6 @@ import {useState} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
-import {Navigate} from "react-router-dom";
 
 export const CreatePostDialog = () => {
     const [open, setOpen] = useState(false);
@@ -39,17 +38,19 @@ export const CreatePostDialog = () => {
                             This post will be shared with all users in The Wall!!
                         </DialogContentText>
                         <TextField
+                            required
                             autoFocus
                             margin="dense"
-                            id="name"
                             label="Title"
                             fullWidth
                             variant="standard"
                             onChange={ e => setTitle(e.target.value) }
                         />
                         <TextField
+                            required
                             variant="outlined"
                             label="Content"
+                            margin="dense"
                             multiline
                             fullWidth
                             maxRows={10}
