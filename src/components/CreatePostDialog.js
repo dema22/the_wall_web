@@ -26,7 +26,7 @@ export const CreatePostDialog = () => {
         handleClose();
     };
     return (
-        <div>
+        <>
             <Button variant="outlined" size="small" onClick={handleClickOpen}>
                 CREATE A NEW POST
             </Button>
@@ -64,6 +64,6 @@ export const CreatePostDialog = () => {
                     </DialogActions>
                 </form>
             </Dialog>
-        </div>
+        </>
     );
 }

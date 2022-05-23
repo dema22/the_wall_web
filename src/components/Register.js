@@ -36,6 +36,10 @@ export const Register = () => {
         return <Navigate to={"/login"}/>
     }
 
+    const handleClose = () => {
+        setErrorMessage('');
+    }
+
     return <div className="container">
         <form onSubmit={submitRegistration} className="registration-container">
             <p>Sign in</p>
@@ -46,6 +50,6 @@ export const Register = () => {
             <TextField margin="dense" required label={'Password'} onChange={ e => setPassword(e.target.value) } className="textfield"/>
             <Button variant="contained" size="medium" type="submit">Submit</Button>
         </form>
-        {errorMessage && <CustomSnackbar open={true} message={errorMessage} />}
+        {errorMessage && <CustomSnackbar onClose={handleClose} open={true} message={errorMessage} />}
     </div>
 }

@@ -1,30 +1,18 @@
-import {useEffect, useState} from "react";
 import {Button, Snackbar} from "@mui/material";
 
 export default function CustomSnackbar(props) {
-    console.log("entro al comp de snackbar");
-    console.log(props);
-    const [open, setOpen] = useState(false);
-
-    useEffect(() => {
-        setOpen(props.open);
-    }, [props.open]);
-
-    const handleClick = () => {
-        setOpen(true);
-    };
-
     const handleClose = (reason) => {
         if (reason === 'clickaway') {
             return;
         }
-
-        setOpen(false);
-    };
+        if(props.onClose) {
+            props.onClose();
+        }
+    }
 
     const action = (
         <>
-            <Button color="secondary" size="small" onClick={handleClose}>
+            <Button color="secondary" size="small" onClick={props.onClose}>
                 Close
             </Button>
         </>
@@ -33,8 +21,8 @@ export default function CustomSnackbar(props) {
     return (
         <div>
             <Snackbar
-                open={open}
-                autoHideDuration={6000}
+                open={props.open}
+                autoHideDuration={4000}
                 onClose={handleClose}
                 message={props.message}
                 action={action}

@@ -5,7 +5,8 @@ import TokenService from "../services/TokenService";
 import axios from "axios";
 
 export default function Navbar() {
-    const [userId, setUserId] = useState(TokenService.getUserId);
+    const [userId, setUserId] = useState(TokenService.getUserId());
+    console.log(TokenService.getUserId());
 
     const logout = async () => {
         try {
