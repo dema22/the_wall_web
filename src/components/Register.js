@@ -89,9 +89,9 @@ export const Register = () => {
             <p>Sign in</p>
             <TextField margin="dense" required label={'First Name'} onChange={ e => setFirstname(e.target.value) } className="textfield" />
             <TextField margin="dense" required label={'Last Name'} onChange={ e => setLastName(e.target.value) } className="textfield"/>
-            <TextField margin="dense" required label={'Username'} className="textfield" onChange={validateUsername} error={Boolean(usernameErrValidator)} helperText={(usernameErrValidator)}/>
-            <TextField margin="dense" required label={'Email'} className="textfield" onChange={validateEmail} error={Boolean(emailErrValidator)} helperText={(emailErrValidator)}/>
-            <TextField margin="dense" required label={'Password'} className="textfield" onChange={validatePassword} error={Boolean(passErrValidator)} helperText={(passErrValidator)}/>
+            <TextField margin="dense" required label={'Username'} onChange={validateUsername} className="textfield" error={Boolean(usernameErrValidator)} helperText={(usernameErrValidator)}/>
+            <TextField margin="dense" required label={'Email'} onChange={validateEmail} className="textfield" error={Boolean(emailErrValidator)} helperText={(emailErrValidator)}/>
+            <TextField margin="dense" required label={'Password'} onChange={validatePassword} className="textfield"  error={Boolean(passErrValidator)} helperText={(passErrValidator)} type="password"/>
             <Button variant="contained" size="medium" type="submit">Submit</Button>
         </form>
         {errorMessage && <CustomSnackbar onClose={handleClose} open={true} message={errorMessage} />}
