@@ -6,8 +6,12 @@ import jwt_decode from "jwt-decode";
 import TokenService from "../services/TokenService";
 import './Login.css';
 import CustomSnackbar from "./CustomSnackbar";
+import AuthContext from "../context/AuthContext";
+import { useContext } from "react";
 
 export const Login = () => {
+    const { authenticate, userIsAuthenticated } = useContext(AuthContext);
+    console.log("Value of is Authenticated from login component when render is: " + authenticate)
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [navigate, setNavigate] = useState(false);
@@ -27,6 +31,8 @@ export const Login = () => {
             TokenService.updateLocalRefreshToken(response);
             TokenService.updateUserId(decodedToken.user_id);
             setNavigate(true);
+            // set in the context the authentication of the user
+            userIsAuthenticated();
         } catch(err) {
             console.log(err.response.data.detail);
             setErrorMessage(err.response.data.detail);

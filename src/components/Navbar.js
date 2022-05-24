@@ -3,10 +3,12 @@ import {AppBar, Box, Button, Toolbar, Typography} from "@mui/material";
 import {Link, Navigate} from "react-router-dom";
 import TokenService from "../services/TokenService";
 import axios from "axios";
+import AuthContext from "../context/AuthContext";
+import { useContext } from "react";
 
 export default function Navbar() {
-    const [userId, setUserId] = useState(TokenService.getUserId());
-    console.log(TokenService.getUserId());
+    const { authenticate, userNotAuthenticated } = useContext(AuthContext);
+    console.log("Value of is Authenticated from navbar component when render is: " + authenticate)
 
     const logout = async () => {
         try {
@@ -21,6 +23,9 @@ export default function Navbar() {
         } catch (err) {
             // If the log out endpoint returns an error is because the token expired, so I just delete them
             TokenService.removeTokenInfo();
+        } finally {
+            // Update context because the user is no longer authenticated
+            userNotAuthenticated();
         }
     };
 
@@ -32,7 +37,7 @@ export default function Navbar() {
                         The Wall
                     </Typography>
 
-                    {!userId ? (
+                    {!authenticate ? (
                         <>
                         <Link to="/login">
                             <Button sx={{color: '#ffffff'}}>Login</Button>
