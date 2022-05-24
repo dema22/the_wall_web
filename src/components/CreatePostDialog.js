@@ -22,6 +22,7 @@ export const CreatePostDialog = () => {
     };
 
     const createPost = async (e) => {
+        console.log("Entrando a crear post");
         if(!Boolean(titleErrValidator) && !Boolean(contentErrValidator)) {
             console.log("Creating post");
             e.preventDefault();
