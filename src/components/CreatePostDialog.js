@@ -19,9 +19,11 @@ export const CreatePostDialog = () => {
         setTitleErrValidator('');
         setContentErrValidator('');
         setOpen(false);
+        console.log("cierro dialogo");
     };
 
     const createPost = async (e) => {
+        e.preventDefault();
         console.log("Entrando a crear post");
         if(!Boolean(titleErrValidator) && !Boolean(contentErrValidator)) {
             console.log("Creating post");
@@ -60,7 +62,7 @@ export const CreatePostDialog = () => {
             <Button variant="outlined" size="small" onClick={handleClickOpen}>
                 CREATE A NEW POST
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
                 <form onSubmit={createPost}>
                     <DialogTitle>Create a new Post!</DialogTitle>
                     <DialogContent>
@@ -84,7 +86,7 @@ export const CreatePostDialog = () => {
                             margin="dense"
                             multiline
                             fullWidth
-                            maxRows={10}
+                            rows={6}
                             onChange={ validateContent }
                             error={Boolean(contentErrValidator)} helperText={(contentErrValidator)}
                         />
