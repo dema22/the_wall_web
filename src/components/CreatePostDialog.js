@@ -7,24 +7,53 @@ export const CreatePostDialog = () => {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    // error validators
+    const [titleErrValidator, setTitleErrValidator] = useState('');
+    const [contentErrValidator, setContentErrValidator] = useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
+        setTitleErrValidator('');
+        setContentErrValidator('');
         setOpen(false);
     };
 
     const createPost = async (e) => {
-        console.log("Creating post");
-        e.preventDefault();
-        const user_id = TokenService.getUserId();
-        const response = await axiosInstance.post('posts/', {
-            title, content, user_id
-        });
-        handleClose();
+        if(!Boolean(titleErrValidator) && !Boolean(contentErrValidator)) {
+            console.log("Creating post");
+            e.preventDefault();
+            const user_id = TokenService.getUserId();
+            const response = await axiosInstance.post('posts/', {
+                title, content, user_id
+            });
+            handleClose();
+        }
     };
+
+    // Validators
+    const validateTitle = (e) => {
+        console.log(e.target.value);
+        const value = e.target.value.trim();
+        setTitleErrValidator('');
+        setTitle(value);
+        if(value.length < 5) {
+            setTitleErrValidator("Post title must have at least 5 character.");
+        }
+    }
+
+    const validateContent = (e) => {
+        console.log(e.target.value);
+        const value = e.target.value.trim();
+        setContentErrValidator('');
+        setContent(value);
+        if(value.length < 10) {
+            setContentErrValidator("Post content must have at least 10 character.");
+        }
+    }
+
     return (
         <>
             <Button variant="outlined" size="small" onClick={handleClickOpen}>
@@ -44,8 +73,8 @@ export const CreatePostDialog = () => {
                             label="Title"
                             fullWidth
                             variant="standard"
-                            onChange={ e => setTitle(e.target.value) }
-                            inputProps={{ maxLength: 20 }}
+                            onChange={ validateTitle }
+                            error={Boolean(titleErrValidator)} helperText={(titleErrValidator)}
                         />
                         <TextField
                             required
@@ -55,7 +84,8 @@ export const CreatePostDialog = () => {
                             multiline
                             fullWidth
                             maxRows={10}
-                            onChange={ e => setContent(e.target.value) }
+                            onChange={ validateContent }
+                            error={Boolean(contentErrValidator)} helperText={(contentErrValidator)}
                         />
                     </DialogContent>
                     <DialogActions>
