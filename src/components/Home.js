@@ -2,6 +2,7 @@ import axios from "axios";
 import {useEffect, useState} from 'react';
 import {Card} from "@mui/material";
 import {Post} from "./Post";
+import './Home.css';
 
 export const Home = () => {
     const [posts,setPosts] = useState([]);
@@ -49,7 +50,8 @@ export const Home = () => {
 
     return (
         <div>
-            <h1>Welcome to the wall! Check what people is posting :)</h1>
+            <h1>¡ Welcome to the wall !</h1>
+            <h2>Check what people is posting 😀</h2>
             <>
                 {renderPosts()}
             </>

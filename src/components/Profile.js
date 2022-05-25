@@ -2,7 +2,8 @@ import {useEffect, useState} from 'react';
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
 import {CreatePostDialog} from "./CreatePostDialog";
-import {Button} from "@mui/material";
+import {Button, Card} from "@mui/material";
+import {Post} from "./Post";
 
 export const Profile = () => {
     const [username,setUsername] = useState('');
@@ -27,21 +28,37 @@ export const Profile = () => {
         setUserPosts(userPostResponse.data);
     }
 
+    const renderUserPosts = () => {
+        if (userPosts.length < 1) {
+            return(
+                <Card> Create a new post !</Card>
+            )
+        }
+        return userPosts.map( (post) => {
+            let formattedDate = post.created_at.split('T');
+            let hoursAndMinutes= formattedDate[1].split(':');
+            return (
+                <Post
+                    key={post.id}
+                    content={post.content}
+                    title={post.title}
+                    author={post.user_name}
+                    time={`${formattedDate[0]}  ${hoursAndMinutes[0]}:${hoursAndMinutes[1]}`}
+                >
+                </Post>
+            )
+        })
+    };
+
     return (
         <div>
             <h3> Hi {username}!!!</h3>
             <p>Now that you have an account, you can :</p>
             <Button variant="outlined" size="small" onClick={viewUserPosts}>VIEW YOUR POSTS</Button>
             <CreatePostDialog/>
-        {userPosts.map((post) => {
-            return (
-                <div key={post.id} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px"  }}>
-                    <div>Created at: {post.created_at.toString()}</div>
-                    <div>Title: {post.title}</div>
-                    <div>Content: {post.content}</div>
-                </div>
-            )
-        })}
+            <>
+                {renderUserPosts()}
+            </>
         </div>
     );
 }
