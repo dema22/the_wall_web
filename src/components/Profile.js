@@ -4,24 +4,24 @@ import TokenService from "../services/TokenService";
 import {CreatePostDialog} from "./CreatePostDialog";
 import {Button, Card} from "@mui/material";
 import {Post} from "./Post";
+import './Profile.css';
 
 export const Profile = () => {
     const [username,setUsername] = useState('');
     const [userPosts,setUserPosts] = useState([]);
 
-    // useEffect doesn't expect the callback function to return Promise, using self invoking async function.
     useEffect(() => {
-        (
-            async () => {
-                const response = await axiosInstance.get('profile/user/' + TokenService.getUserId());
-                console.log(response);
-                setUsername(response.data.username);
-            }
-        )();
+        getUserInfo();
+        getUserPosts();
     }, []);
 
-    const viewUserPosts = async () => {
-        console.log("Viewing my posts");
+    const getUserInfo = async () => {
+        const response = await axiosInstance.get('profile/user/' + TokenService.getUserId());
+        console.log(response);
+        setUsername(response.data.username);
+    }
+
+    const getUserPosts = async () => {
         // Send request to the API to view the posts from the logged user.
         const userPostResponse = await axiosInstance.get('post/profile/' + TokenService.getUserId());
         console.log(userPostResponse.data);
@@ -53,9 +53,8 @@ export const Profile = () => {
 
     return (
         <div>
-            <h3> Hi {username}!!!</h3>
-            <p>Now that you have an account, you can :</p>
-            <Button variant="outlined" size="small" onClick={viewUserPosts}>VIEW YOUR POSTS</Button>
+            <h2> 👋 {username}!!!</h2>
+            <p> From your profile can view all the post you have created so far or create a new one</p>
             <CreatePostDialog/>
             <>
                 {renderUserPosts()}

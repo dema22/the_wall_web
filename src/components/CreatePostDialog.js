@@ -1,5 +1,14 @@
 import {useState} from "react";
-import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    TextField
+} from "@mui/material";
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
 
@@ -59,9 +68,15 @@ export const CreatePostDialog = () => {
 
     return (
         <>
-            <Button variant="outlined" size="small" onClick={handleClickOpen}>
-                CREATE A NEW POST
-            </Button>
+            <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+            >
+                <Button variant="outlined" size="small" onClick={handleClickOpen}>
+                    CREATE A NEW POST
+                </Button>
+            </Box>
             <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
                 <form onSubmit={createPost}>
                     <DialogTitle>Create a new Post!</DialogTitle>
