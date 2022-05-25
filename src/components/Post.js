@@ -5,9 +5,15 @@ export const Post = (props) => {
     return (
         <Card className="post-container">
             <CardContent className="card-container">
-                <Typography component="p">
-                    Created by {props.author} on {props.time}
-                </Typography>
+                {props.showAuthor ?
+                    <Typography component="p">
+                        Created by {props.author} on {props.time}
+                    </Typography>
+                    :
+                    <Typography component="p">
+                        You post this on {props.time}
+                    </Typography>
+                }
                 <Typography component="p">
                     Title: {props.title}
                 </Typography>

@@ -42,6 +42,7 @@ export const Home = () => {
                      title={post.title}
                      author={post.user_name}
                      time={`${formattedDate[0]}  ${hoursAndMinutes[0]}:${hoursAndMinutes[1]}`}
+                     showAuthor={true}
                  >
                  </Post>
              )

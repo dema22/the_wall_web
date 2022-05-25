@@ -44,6 +44,7 @@ export const Profile = () => {
                     title={post.title}
                     author={post.user_name}
                     time={`${formattedDate[0]}  ${hoursAndMinutes[0]}:${hoursAndMinutes[1]}`}
+                    showAuthor={false}
                 >
                 </Post>
             )
