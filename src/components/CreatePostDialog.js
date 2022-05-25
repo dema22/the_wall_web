@@ -51,8 +51,8 @@ export const CreatePostDialog = () => {
         const value = e.target.value.trim();
         setTitleErrValidator('');
         setTitle(value);
-        if(value.length < 5) {
-            setTitleErrValidator("Post title must have at least 5 character.");
+        if(value.length < 5 || value.length > 50) {
+            setTitleErrValidator("Post title must have at least 5 character and no more than 50.");
         }
     }
 
