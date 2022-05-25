@@ -1,5 +1,7 @@
 import axios from "axios";
 import {useEffect, useState} from 'react';
+import {Card} from "@mui/material";
+import {Post} from "./Post";
 
 export const Home = () => {
     const [posts,setPosts] = useState([]);
@@ -21,18 +23,36 @@ export const Home = () => {
         )();
     }, [])
 
+    const renderPosts = () => {
+        console.log("entro a render posts");
+        console.log(posts.length);
+        if (posts.length < 1) {
+            return(
+                <Card> No comments yet, create a new comment!</Card>
+            )
+        }
+        return posts.map( (post) => {
+             let formattedDate = post.created_at.split('T');
+             let hoursAndMinutes= formattedDate[1].split(':');
+             return (
+                 <Post
+                     key={post.id}
+                     content={post.content}
+                     title={post.title}
+                     author={post.user_name}
+                     time={`${formattedDate[0]}  ${hoursAndMinutes[0]}:${hoursAndMinutes[1]}`}
+                 >
+                 </Post>
+             )
+         })
+    };
+
     return (
-        <div>Welcome to the wall! Check what people is posting :)
-        {posts.map((post) => {
-        return (
-            <div key={post.id} style={{ backgroundColor: "OldLace", marginTop: "16px", padding: "8px"  }}>
-                <div>Created at: {post.created_at.toString()}</div>
-                <div>Created by: {post.user_name}</div>
-                <div>Title: {post.title}</div>
-                <div>Content: {post.content}</div>
-            </div>
-        )
-        })}
+        <div>
+            <h1>Welcome to the wall! Check what people is posting :)</h1>
+            <>
+                {renderPosts()}
+            </>
         </div>
     );
 }
