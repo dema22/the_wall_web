@@ -1,35 +1,32 @@
 import axios from "axios";
 import {useEffect, useState} from 'react';
-import {Card} from "@mui/material";
 import {Post} from "./Post";
-import './Home.css';
+import CustomSnackbar from "./CustomSnackbar";
 
 export const Home = () => {
     const [posts,setPosts] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    // useEffect doesn't expect the callback function to return Promise, using self invoking async function.
     useEffect(() => {
         (
             async () => {
                 try {
-                    // Get all posts
+                    // Get all posts from all users.
                     const postsResponse = await axios.get('http://localhost:8000/posts/');
-                    console.log(postsResponse.data);
-                    // store our posts in react state
+                    // Store our posts in react state
                     setPosts(postsResponse.data);
                 } catch (error) {
-                    console.log(error);
+                    setErrorMessage("We are sorry, something went wrong. Try again later.");
                 }
             }
         )();
     }, [])
 
+    // We render Post Components using our state variable (posts).
     const renderPosts = () => {
-        console.log("entro a render posts");
-        console.log(posts.length);
         if (posts.length < 1) {
             return(
-                <Card> No comments yet, create a new comment!</Card>
+                <p style={{textAlign: "center"}}> Nobody has commented yet ...  </p>
             )
         }
         return posts.map( (post) => {
@@ -49,13 +46,18 @@ export const Home = () => {
          })
     };
 
+    const handleClose = () => {
+        setErrorMessage('');
+    }
+
     return (
         <div>
-            <h1>¡ Welcome to the wall !</h1>
-            <h2>Check what people is posting 😀</h2>
+            <h1 style={{textAlign: "center"}}>¡ Welcome to the wall !</h1>
+            <h2 style={{textAlign: "center"}}>Check what people is posting 😀</h2>
             <>
                 {renderPosts()}
             </>
+        {errorMessage && <CustomSnackbar onClose={handleClose} open={true} message={errorMessage} />}
         </div>
     );
 }
