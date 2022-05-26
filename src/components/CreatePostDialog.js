@@ -12,7 +12,7 @@ import {
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
 
-export const CreatePostDialog = () => {
+export const CreatePostDialog = (props) => {
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
@@ -40,6 +40,13 @@ export const CreatePostDialog = () => {
             const user_id = TokenService.getUserId();
             const response = await axiosInstance.post('posts/', {
                 title, content, user_id
+            });
+            // Sending the new post to the parent component (Profile)
+            props.addPost({
+                id: response.data.id,
+                created_at: response.data.created_at,
+                title:response.data.title,
+                content:response.data.content
             });
             handleClose();
         }

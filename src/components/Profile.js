@@ -29,6 +29,7 @@ export const Profile = () => {
     }
 
     const renderUserPosts = () => {
+        console.log(userPosts);
         if (userPosts.length < 1) {
             return(
                 <Card> Create a new post !</Card>
@@ -50,12 +51,15 @@ export const Profile = () => {
             )
         })
     };
+    const addNewPost = (newPost) => {
+        setUserPosts([newPost,...userPosts]);
+    };
 
     return (
         <div>
             <h2> 👋 {username}!!!</h2>
             <p> From your profile can view all the post you have created so far or create a new one</p>
-            <CreatePostDialog/>
+            <CreatePostDialog addPost={addNewPost}/>
             <>
                 {renderUserPosts()}
             </>
