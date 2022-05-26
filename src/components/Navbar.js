@@ -37,6 +37,10 @@ export default function Navbar() {
                         The Wall
                     </Typography>
 
+                    <Link to="/">
+                        <Button sx={{color: '#ffffff'}}>Home</Button>
+                    </Link>
+
                     {!authenticate ? (
                         <>
                         <Link to="/login">
