@@ -31,13 +31,13 @@ export const Register = () => {
         } catch(err) {
             let errUsername = '', errEmail = '',  errPassword = '';
             if(err.response.data.username) {
-                errUsername = err.response.data.username[0];
+                errUsername = err.response.data.username[0] + ' ';
             }
             if(err.response.data.email) {
-                errEmail = err.response.data.email[0];
+                errEmail = err.response.data.email[0] + ' ' ;
             }
             if(err.response.data.password) {
-                errPassword = err.response.data.password[0];
+                errPassword = err.response.data.password[0] + ' ' ;
             }
             setErrorMessage(errUsername + errEmail + errPassword)
             e.target.reset();
