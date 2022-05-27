@@ -51,9 +51,9 @@ export const Home = () => {
     }
 
     return (
-        <div>
-            <h1 style={{textAlign: "center"}}>¡ Welcome to the wall !</h1>
-            <h2 style={{textAlign: "center"}}>Check what people is posting 😀</h2>
+        <div style={{textAlign: "center"}}>
+            <h1>¡ Welcome to the wall !</h1>
+            <h2>Check what people is posting 😀</h2>
             <>
                 {renderPosts()}
             </>
