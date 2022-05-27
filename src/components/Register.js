@@ -21,29 +21,35 @@ export const Register = () => {
     const submitRegistration = async (e) => {
         e.preventDefault();
         try {
+            //If there is no errors in the state validators variables, we send request to the API to create a user.
             if (!Boolean(usernameErrValidator) && !Boolean(usernameErrValidator) && !Boolean(usernameErrValidator)) {
-                // Send request to the API to create a user
                 await axios.post('http://localhost:8000/registration/', {
                     first_name, last_name, username, email, password
                 });
                 setNavigate(true);
             }
         } catch(err) {
-            let errUsername = '', errEmail = '',  errPassword = '';
-            if(err.response.data.username) {
-                errUsername = err.response.data.username[0] + ' ';
-            }
-            if(err.response.data.email) {
-                errEmail = err.response.data.email[0] + ' ' ;
-            }
-            if(err.response.data.password) {
-                errPassword = err.response.data.password[0] + ' ' ;
-            }
-            setErrorMessage(errUsername + errEmail + errPassword)
+            generateErrorMessageFromAPIResponse(err);
             e.target.reset();
         }
     }
 
+    // We generate the message for the snackbar, and saved it on our state variable (errorMessage).
+    const generateErrorMessageFromAPIResponse = (err) => {
+        let errUsername = '', errEmail = '',  errPassword = '';
+        if(err.response.data.username) {
+            errUsername = err.response.data.username[0] + ' ';
+        }
+        if(err.response.data.email) {
+            errEmail = err.response.data.email[0] + ' ' ;
+        }
+        if(err.response.data.password) {
+            errPassword = err.response.data.password[0] + ' ' ;
+        }
+        setErrorMessage(errUsername + errEmail + errPassword);
+    };
+
+    // If everything went well with the registration, redirect to Login.
     if(navigate) {
         return <Navigate to={"/login"}/>
     }
@@ -52,19 +58,18 @@ export const Register = () => {
         setErrorMessage('');
     }
 
+    // The following functions validate the inputs of the form.
+    // They will get triggered by the onChange event (everytime the user change values in the inputs).
     const validateUsername = (e) => {
-        console.log(e.target.value);
         const value = e.target.value.trim();
         setUsernameErrValidator('');
         setUsername(value);
         if(value.length < 8 || value.length > 50) {
-            console.log("error de max y min en username");
-            setUsernameErrValidator("Username must have at least 8 character and not more than 50.");
+            setUsernameErrValidator("Username must have at least 8 characters and not more than 50.");
         }
     }
 
     const validateEmail = (e) => {
-        console.log(e.target.value);
         const value = e.target.value.trim();
         setEmailErrValidator('');
         setEmail(value);
@@ -74,13 +79,11 @@ export const Register = () => {
     }
 
     const validatePassword = (e) => {
-        console.log(e.target.value);
         const value = e.target.value;
         setPassErrValidator('');
         setPassword(value);
         if(value.length < 8) {
-            console.log("error de min pass");
-            setPassErrValidator("Password must have at least 8 character.");
+            setPassErrValidator("Password must have at least 8 characters.");
         }
     }
 
@@ -89,7 +92,7 @@ export const Register = () => {
             <p>Sign in</p>
             <TextField margin="dense" required label={'First Name'} onChange={ e => setFirstname(e.target.value) } className="textfield" />
             <TextField margin="dense" required label={'Last Name'} onChange={ e => setLastName(e.target.value) } className="textfield"/>
-            <TextField margin="dense" required label={'Username'} onChange={validateUsername} className="textfield" error={Boolean(usernameErrValidator)} helperText={(usernameErrValidator)}/>
+            <TextField margin="dense" required label={'Username'} onChange={validateUsername} className="textfield" error={Boolean(usernameErrValidator)} helperText={(usernameErrValidator)} inputProps={{ maxLength: 50 }}/>
             <TextField margin="dense" required label={'Email'} onChange={validateEmail} className="textfield" error={Boolean(emailErrValidator)} helperText={(emailErrValidator)}/>
             <TextField margin="dense" required label={'Password'} onChange={validatePassword} className="textfield"  error={Boolean(passErrValidator)} helperText={(passErrValidator)} type="password"/>
             <Button variant="contained" size="medium" type="submit">Submit</Button>
