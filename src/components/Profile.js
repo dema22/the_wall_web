@@ -2,14 +2,14 @@ import {useEffect, useState} from 'react';
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
 import {CreatePostDialog} from "./CreatePostDialog";
-import {Button, Card} from "@mui/material";
+import {Card} from "@mui/material";
 import {Post} from "./Post";
-import './Profile.css';
 
 export const Profile = () => {
     const [username,setUsername] = useState('');
     const [userPosts,setUserPosts] = useState([]);
 
+    // Run only on the first render
     useEffect(() => {
         getUserInfo();
         getUserPosts();
@@ -22,14 +22,14 @@ export const Profile = () => {
     }
 
     const getUserPosts = async () => {
-        // Send request to the API to view the posts from the logged user.
+        // We Send request to the API to get all posts from the logged user.
         const userPostResponse = await axiosInstance.get('post/profile/' + TokenService.getUserId());
         console.log(userPostResponse.data);
         setUserPosts(userPostResponse.data);
     }
 
+    // We render Post Components using our state variable (posts).
     const renderUserPosts = () => {
-        console.log(userPosts);
         if (userPosts.length < 1) {
             return(
                 <Card> Create a new post !</Card>
@@ -51,12 +51,13 @@ export const Profile = () => {
             )
         })
     };
+    // Functions that is triggered from the CreateDialogPost component. We receive the new post, and we update our state array with the new post.
     const addNewPost = (newPost) => {
         setUserPosts([newPost,...userPosts]);
     };
 
     return (
-        <div>
+        <div style={{textAlign: "center"}}>
             <h2> 👋 {username}!!!</h2>
             <p> From your profile can view all the post you have created so far or create a new one</p>
             <CreatePostDialog addPost={addNewPost}/>
