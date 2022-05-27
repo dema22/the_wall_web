@@ -10,8 +10,7 @@ import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
 
 export const Login = () => {
-    const { authenticate, userIsAuthenticated } = useContext(AuthContext);
-    console.log("Value of is Authenticated from login component when render is: " + authenticate)
+    const { saveAuthentication } = useContext(AuthContext);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [navigate, setNavigate] = useState(false);
@@ -33,7 +32,7 @@ export const Login = () => {
             TokenService.updateUserId(decodedToken.user_id);
             setNavigate(true);
             // saved authentication in context.
-            userIsAuthenticated();
+            saveAuthentication();
         } catch(err) {
             console.log(err.response.data.detail);
             // We save the error message for the snackbar.
