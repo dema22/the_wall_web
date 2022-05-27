@@ -6,13 +6,17 @@ import axios from "axios";
 import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
 
+// We are going to render some elements of the navbar depending if the user is authenticated or not.
+// For that we are going to check the state variable from the AuthContext.
+
 export default function Navbar() {
-    const { authenticate, userNotAuthenticated } = useContext(AuthContext);
+    const { authenticate, removeAuthentication } = useContext(AuthContext);
     console.log("Value of is Authenticated from navbar component when render is: " + authenticate)
 
+    // We call our logout endpoint.
+    // We also remove all information from local storage and remove authentication from the authContext.
     const logout = async () => {
         try {
-            console.log("Calling log out endpoint");
             const accessToken = TokenService.getLocalAccessToken();
             await axios.post('http://localhost:8000/logout/', {
                 refresh_token: TokenService.getLocalRefreshToken(),
@@ -21,11 +25,11 @@ export default function Navbar() {
             });
             TokenService.removeTokenInfo();
         } catch (err) {
-            // If the log out endpoint returns an error is because the token expired, so I just delete them
+            // If the log out endpoint returns an error is because the token expired, so I just delete them.
             TokenService.removeTokenInfo();
         } finally {
-            // Update context because the user is no longer authenticated
-            userNotAuthenticated();
+            // Update context because the user is no longer authenticated.
+            removeAuthentication();
         }
     };
 

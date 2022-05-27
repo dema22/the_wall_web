@@ -12,12 +12,12 @@ export function AuthProvider ({ children }) {
         setAuthenticate(true);
     };
 
-    const userNotAuthenticated = () => {
+    const removeAuthentication = () => {
         setAuthenticate(false);
     }
 
     return (
-        <AuthContext.Provider value={ { authenticate, saveAuthentication, userNotAuthenticated }}>{children}</AuthContext.Provider>
+        <AuthContext.Provider value={ { authenticate, saveAuthentication, removeAuthentication }}>{children}</AuthContext.Provider>
     );
 }
 export default AuthContext;
