@@ -2,13 +2,14 @@ import axios from "axios";
 import TokenService from "../services/TokenService";
 const baseURL = "http://localhost:8000/";
 
+// Create a custom axios instance.
 const axiosInstance = axios.create({
     baseURL,
     headers: {
         "Content-Type": "application/json",
     },
 });
-
+// Add an interceptor to every request, so I can send an Authorization header with the access token.
 axiosInstance.interceptors.request.use(
     (config) => {
         const token = TokenService.getLocalAccessToken();
@@ -21,6 +22,9 @@ axiosInstance.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+// I will also add logic to intercept every failed response.
+// If they fail with status code 401 (Unauthorized), then I will try to get a new access token calling my refresh token endpoint.
+// If I get a new token, I saved it on local storage. If something fails, I will remove everything from local storage and force a redirect to login template.
 
 axiosInstance.interceptors.response.use(response => response, async (err) => {
         const { response, config } = err;
@@ -30,13 +34,9 @@ axiosInstance.interceptors.response.use(response => response, async (err) => {
         }
 
         try {
-            console.log("Miro el token de refresco que tengo guardado antes de llamar al endpoint");
-            console.log(TokenService.getLocalRefreshToken());
             const rs = await axios.post(baseURL + "token/refresh/", {
                 refresh: TokenService.getLocalRefreshToken(),
             });
-            console.log("NUEVO TOKEN DE ACCESSO QUE ME DIO EL ENDPOINT DE REFRESCO");
-            console.log(rs.data.access);
             TokenService.updateLocalAccessToken(rs);
             return axiosInstance(config);
         } catch (_error) {

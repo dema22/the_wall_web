@@ -15,14 +15,12 @@ class TokenService {
         localStorage.setItem('refreshToken', token.data.refresh);
     }
     updateLocalAccessToken(token) {
-        console.log(token);
         localStorage.setItem('accessToken', token.data.access);
     }
     updateUserId(userId) {
         localStorage.setItem('userId', userId);
     }
     removeTokenInfo() {
-        console.log("REMOVE TOKEN INFO FROM LOCAL STORAGE");
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("userId");
