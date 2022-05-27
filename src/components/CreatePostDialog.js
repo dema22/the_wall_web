@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
+import CustomSnackbar from "./CustomSnackbar";
 
 export const CreatePostDialog = (props) => {
     // state to control dialog
@@ -21,6 +22,8 @@ export const CreatePostDialog = (props) => {
     // state for error validators
     const [titleErrValidator, setTitleErrValidator] = useState('');
     const [contentErrValidator, setContentErrValidator] = useState('');
+    // state for error message
+    const [errorMessage, setErrorMessage] = useState('');
 
     // Function to open the dialog.
     const handleClickOpen = () => {
@@ -36,22 +39,26 @@ export const CreatePostDialog = (props) => {
 
     // If there is no errors in the state validators variables, we are going to create a post for the logged user.
     const createPost = async (e) => {
-        e.preventDefault();
+        try {
+            e.preventDefault();
 
-        if(!Boolean(titleErrValidator) && !Boolean(contentErrValidator)) {
-            const user_id = TokenService.getUserId();
-            const createdPost = await axiosInstance.post('posts/', {
-                title, content, user_id
-            });
-            // We create a new post object based on the createdPost response from the API.
-            // We send it to the parent component (Profile)
-            props.addPost({
-                id: createdPost.data.id,
-                created_at: createdPost.data.created_at,
-                title:createdPost.data.title,
-                content:createdPost.data.content
-            });
-            handleClose();
+            if(!Boolean(titleErrValidator) && !Boolean(contentErrValidator)) {
+                const user_id = TokenService.getUserId();
+                const createdPost = await axiosInstance.post('posts/', {
+                    title, content, user_id
+                });
+                // We create a new post object based on the createdPost response from the API.
+                // We send it to the parent component (Profile)
+                props.addPost({
+                    id: createdPost.data.id,
+                    created_at: createdPost.data.created_at,
+                    title:createdPost.data.title,
+                    content:createdPost.data.content
+                });
+                handleClose();
+            }
+        }catch (e) {
+            setErrorMessage("We are sorry, something went wrong. Try again later.");
         }
     };
 
@@ -72,6 +79,10 @@ export const CreatePostDialog = (props) => {
         if(value.length < 10) {
             setContentErrValidator("Post content must have at least 10 characters.");
         }
+    }
+
+    const handleCloseSnackbar = () => {
+        setErrorMessage('');
     }
 
     return (
@@ -120,6 +131,7 @@ export const CreatePostDialog = (props) => {
                     </DialogActions>
                 </form>
             </Dialog>
+            {errorMessage && <CustomSnackbar onClose={handleCloseSnackbar} open={true} message={errorMessage} />}
         </>
     );
 }
