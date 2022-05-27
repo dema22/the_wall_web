@@ -4,7 +4,6 @@ import {Navigate} from "react-router-dom";
 
 const ProtectedRoute = ({ children }) => {
     const { authenticate } = useContext(AuthContext);
-    console.log("Value of is Authenticated from protected route component: " + authenticate)
 
     // If the user is not authenticated redirect to the home page
     if (!authenticate) {

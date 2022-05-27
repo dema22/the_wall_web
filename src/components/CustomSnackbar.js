@@ -1,5 +1,10 @@
 import {Alert, Snackbar} from "@mui/material";
 
+// CustomSnackbar:
+// Props:
+// message (error message to display),
+// onClose: function that will be call to close the snackbar from the parent component.
+
 export default function CustomSnackbar(props) {
     const handleClose = (reason) => {
         if (reason === 'clickaway') {
