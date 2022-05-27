@@ -67,8 +67,8 @@ export const CreatePostDialog = (props) => {
         const value = e.target.value.trim();
         setTitleErrValidator('');
         setTitle(value);
-        if(value.length < 5 || value.length > 50) {
-            setTitleErrValidator("Post title must have at least 5 characters and no more than 50.");
+        if(value.length < 5 || value.length > 120) {
+            setTitleErrValidator("Post title must have at least 5 characters and no more than 120.");
         }
     }
     // Inputs validators
@@ -105,13 +105,15 @@ export const CreatePostDialog = (props) => {
                         </DialogContentText>
                         <TextField
                             required
-                            autoFocus
                             margin="dense"
                             label="Title"
                             fullWidth
-                            variant="standard"
+                            variant="outlined"
                             onChange={ validateTitle }
                             error={Boolean(titleErrValidator)} helperText={(titleErrValidator)}
+                            multiline
+                            rows={2}
+                            inputProps={{ maxLength: 120 }}
                         />
                         <TextField
                             required
