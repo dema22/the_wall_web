@@ -5,12 +5,15 @@ import TokenService from "../services/TokenService";
 import AuthContext from "../context/AuthContext";
 import { useContext } from "react";
 import axiosInstance from "../interceptors/axios";
+import CustomSnackbar from "./CustomSnackbar";
+import {useState} from "react";
 
 // We are going to render some elements of the navbar depending if the user is authenticated or not.
 // For that we are going to check the state variable from the AuthContext.
 
 export default function Navbar() {
     const { authenticate, removeAuthentication } = useContext(AuthContext);
+    const [errorMessage, setErrorMessage] = useState('');
 
     // We call our logout endpoint, so we can invalidate the refresh token.
     // We also remove all information from local storage and remove authentication from the authContext.
@@ -22,9 +25,13 @@ export default function Navbar() {
             TokenService.removeTokenInfo();
             removeAuthentication();
         } catch (e) {
-            console.log("error");
+            setErrorMessage("We are sorry, something went wrong. Try again later.");
         }
     };
+
+    const handleClose = () => {
+        setErrorMessage('');
+    }
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -59,6 +66,7 @@ export default function Navbar() {
                         )}
                 </Toolbar>
             </AppBar>
+            {errorMessage && <CustomSnackbar onClose={handleClose} open={true} message={errorMessage} />}
         </Box>
     );
 }
