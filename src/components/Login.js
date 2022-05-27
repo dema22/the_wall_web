@@ -24,22 +24,25 @@ export const Login = () => {
             const response = await axios.post('http://localhost:8000/token/', {
                 username, password
             });
-            // Save the access token , refresh token in localstorage, and user id from decoded token.
+            // Save the access token , refresh token in localstorage.
+            // Also, we save the user id from the decoded access token.
             const token = response.data.access;
             const decodedToken = jwt_decode(token);
             TokenService.updateLocalAccessToken(response);
             TokenService.updateLocalRefreshToken(response);
             TokenService.updateUserId(decodedToken.user_id);
             setNavigate(true);
-            // set in the context the authentication of the user
+            // saved authentication in context.
             userIsAuthenticated();
         } catch(err) {
             console.log(err.response.data.detail);
+            // We save the error message for the snackbar.
             setErrorMessage(err.response.data.detail);
             e.target.reset();
         }
     }
 
+    // We redirect the user to the profile page, if the log in was a success.
     if(navigate) {
         return <Navigate to={"/profile"}/>
     }
