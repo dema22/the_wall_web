@@ -13,63 +13,64 @@ import axiosInstance from "../interceptors/axios";
 import TokenService from "../services/TokenService";
 
 export const CreatePostDialog = (props) => {
+    // state to control dialog
     const [open, setOpen] = useState(false);
+    // state inputs
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    // error validators
+    // state for error validators
     const [titleErrValidator, setTitleErrValidator] = useState('');
     const [contentErrValidator, setContentErrValidator] = useState('');
 
+    // Function to open the dialog.
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    // Function to close dialog. We reset all errors state variables before closing.
     const handleClose = () => {
         setTitleErrValidator('');
         setContentErrValidator('');
         setOpen(false);
-        console.log("cierro dialogo");
     };
 
+    // If there is no errors in the state validators variables, we are going to create a post for the logged user.
     const createPost = async (e) => {
         e.preventDefault();
-        console.log("Entrando a crear post");
+
         if(!Boolean(titleErrValidator) && !Boolean(contentErrValidator)) {
-            console.log("Creating post");
-            e.preventDefault();
             const user_id = TokenService.getUserId();
-            const response = await axiosInstance.post('posts/', {
+            const createdPost = await axiosInstance.post('posts/', {
                 title, content, user_id
             });
-            // Sending the new post to the parent component (Profile)
+            // We create a new post object based on the createdPost response from the API.
+            // We send it to the parent component (Profile)
             props.addPost({
-                id: response.data.id,
-                created_at: response.data.created_at,
-                title:response.data.title,
-                content:response.data.content
+                id: createdPost.data.id,
+                created_at: createdPost.data.created_at,
+                title:createdPost.data.title,
+                content:createdPost.data.content
             });
             handleClose();
         }
     };
 
-    // Validators
+    // Inputs validators
     const validateTitle = (e) => {
-        console.log(e.target.value);
         const value = e.target.value.trim();
         setTitleErrValidator('');
         setTitle(value);
         if(value.length < 5 || value.length > 50) {
-            setTitleErrValidator("Post title must have at least 5 character and no more than 50.");
+            setTitleErrValidator("Post title must have at least 5 characters and no more than 50.");
         }
     }
-
+    // Inputs validators
     const validateContent = (e) => {
-        console.log(e.target.value);
         const value = e.target.value.trim();
         setContentErrValidator('');
         setContent(value);
         if(value.length < 10) {
-            setContentErrValidator("Post content must have at least 10 character.");
+            setContentErrValidator("Post content must have at least 10 characters.");
         }
     }
 
