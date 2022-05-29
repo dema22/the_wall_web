@@ -29,7 +29,7 @@ export const Profile = () => {
     const getUserPosts = async () => {
         try {
             // We Send request to the API to get all posts from the logged user.
-            const userPostResponse = await axiosInstance.get('post/profile/' + TokenService.getUserId());
+            const userPostResponse = await axiosInstance.get('posts/user/' + TokenService.getUserId());
             setUserPosts(userPostResponse.data);
         } catch(e) {
             setErrorMessage("We are sorry, something went wrong. Try again later.");
